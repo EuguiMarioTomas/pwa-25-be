@@ -4,7 +4,8 @@
   "description": "servidor utilizado para pwa-25",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -12,10 +13,6 @@
   },
   "author": "Tomas Eugui <mariotomaseugui@gmail.com>",
   "license": "ISC",
-  "scripts":{
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
-  },
   "type": "module",
   "bugs": {
     "url": "https://github.com/EuguiMarioTomas/pwa-25/issues"
@@ -24,7 +21,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongoose": "^8.14.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
