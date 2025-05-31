@@ -1,30 +1,20 @@
-import mongoose, {Schema} from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
-const userSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    lastName:{
-        type: String,
-        required: true,
-        trim: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-},{
-    timestamps: true,
+export interface IUser extends Document {
+    name: string;
+    lastName: string;
+    email: string;
+    createdAt: Date;
+    isActive?: boolean; 
+};
+const userSchema = new Schema<IUser>({
+    name: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, trim: true },
+    createdAt: { type: Date, default: Date.now },
+    isActive: { type: Boolean, default: true }, 
 });
 
-const User = mongoose.model('User', userSchema);
+const User = model<IUser>('User', userSchema);
 
 export default User;
