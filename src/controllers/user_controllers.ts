@@ -1,6 +1,7 @@
 import User from "../models/user_models";
 import { Request, Response } from "express";
 
+//CREACION DE USUARIO
 const createUser = async (req: Request, res: Response)=> {
     try{
         const { name, lastName, email } = req.body;
@@ -19,6 +20,7 @@ const createUser = async (req: Request, res: Response)=> {
     }
 };
 
+//OBTENCION DE TODOS LOS USUARIOS
 const getAllUsers = async (req: Request, res: Response) => {
     try {
         const users = await User.find();
@@ -34,6 +36,7 @@ const getAllUsers = async (req: Request, res: Response) => {
     }
 };
 
+//OBTENCION POR ID
 const getUserById = async (req: Request, res: Response) => {
     try{
         const { id } = req.params;
@@ -57,6 +60,7 @@ const getUserById = async (req: Request, res: Response) => {
     }
 };
 
+//ACTUALIZACION
 const updateUser = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -86,11 +90,11 @@ const updateUser = async (req: Request, res: Response) => {
     }
 };
 
+//BAJA LOGICA
 const deleteUser = async (req: Request, res: Response) => {
     try{
         const { id } = req.params;
         const user = await User.findById(id);
-
         if(!user) {
             res.status(404).json({
                 message: "Usuario no encontrado",
@@ -98,40 +102,80 @@ const deleteUser = async (req: Request, res: Response) => {
             });
             return;
         }
-        const isActiveStatus = !user.isActive;
-        const updatedUser = await User.findByIdAndUpdate(id, { isActive: isActiveStatus }, { new: true, runValidators: true });
+        if(!user.isActive) {
+            res.status(200).json({
+                message: "Usuario ya está inactivo",
+                data: user,
+                error: false,
+            });
+            return;
+        }
+        const updatedUser = await User.findByIdAndUpdate( id, { isActive: false }, { new: true, runValidators: true });
         if(!updatedUser) {
-            res.status(400).json({
-            message: "Error al eliminar el usuario",
-            error: true,
+            res.status(500).json({
+                message: "Error al desactivar usuario",
+                error: true,
             });
             return;
         }
-        if (updatedUser.isActive) {
-            res.status(200).json({
-                message: "Usuario activado exitosamente",
-                data: updatedUser,
-                error: false,
-            });
-            return;
-        }else{
-            res.status(200).json({
-                message: "Usuario desactivado exitosamente",
-                data: updatedUser,
-                error: false,
-            });
-            return;
-        }
+        res.status(200).json({
+            message: "Usuario desactivado exitosamente",
+            data: updatedUser,
+            error: false,
+        });
     }catch (error:any) {
         res.status(400).json({
             error: error.message,
         });
     }
 };
+
+//REACTIVACION DE USUARIO
+const activateUser = async (req: Request, res: Response) => {
+    try{
+        const { id } = req.params;
+        const user = await User.findById(id);
+        if(!user) {
+            res.status(404).json({
+                message: "Usuario no encontrado",
+                error: true,
+            });
+            return;
+        }
+        if(user.isActive) {
+            res.status(200).json({
+                message: "Usuario ya está activo",
+                data: user,
+                error: false,
+            });
+            return;
+        }
+        const updatedUser = await User.findByIdAndUpdate( id, { isActive: true }, { new: true, runValidators: true });
+        if(!updatedUser) {
+            res.status(500).json({
+                message: "Error al activar usuario",
+                error: true,
+            });
+            return;
+        }
+        res.status(200).json({
+            message: "Usuario activado exitosamente",
+            data: updatedUser,
+            error: false,
+        });
+    }catch (error:any) {
+        res.status(400).json({
+            error: error.message,
+        });
+    }
+};
+
+//EXPORTACION DE FUNCIONES
 export {
     createUser,
     getAllUsers,
     getUserById,
     updateUser,
     deleteUser,
+    activateUser
 };
