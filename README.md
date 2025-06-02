@@ -1,2 +1,2 @@
 # pwa-25
-proyecto con fines academicos.
+repositorio con fines academicos.
