@@ -33,7 +33,7 @@ const createPost = async (req: Request, res: Response) => {
 const getAllPosts = async (req: Request, res: Response) => {
     try {
         const posts = await Post.find().populate('author', 'name email').populate('likes', 'name lastName').exec();
-        //const posts = await Post.find().populate('author', 'name lastName email').populate('likes', 'name lastName email').exec();
+        //const posts = await Post.find().populate('author', 'name lastName email').populate('likes', 'name lastName email').exec(); //si se requiere mostrar todos los datos de los likes
         res.status(200).json({
             message: 'Posts obtenidos exitosamente',
             data: posts,
