@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config(); // Carga las variables de entorno desde el archivo .env
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 const startServer = async () => {
   try {
@@ -15,6 +15,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('Error al iniciar el servidor:', error);
+    process.exit(1); // Termina el proceso si hay un error al iniciar el servidor
   }
 };
 
