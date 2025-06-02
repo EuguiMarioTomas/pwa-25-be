@@ -2,6 +2,7 @@ import User from '../models/user_models';
 import Post from '../models/post_models';
 import { Request, Response } from 'express';
 
+//CREACION DE UN POST
 const createPost = async (req: Request, res: Response) => {
     try{
         const { title, content, authorId} = req.body;
@@ -13,13 +14,7 @@ const createPost = async (req: Request, res: Response) => {
             });
             return;
         }
-        const newPost = new Post({
-            title,
-            content,
-            author: authorId,
-            likes: [],
-            edited: false,
-        });
+        const newPost = new Post({ title, content, author: authorId, likes: [], edited: false, });
         await newPost.save();
         res.status(201).json({
             message: 'Post creado exitosamente',
@@ -34,9 +29,11 @@ const createPost = async (req: Request, res: Response) => {
     }
 };
 
+//OBTENCION DE TODOS LOS POSTS
 const getAllPosts = async (req: Request, res: Response) => {
     try {
         const posts = await Post.find().populate('author', 'name email').populate('likes', 'name lastName').exec();
+        //const posts = await Post.find().populate('author', 'name lastName email').populate('likes', 'name lastName email').exec();
         res.status(200).json({
             message: 'Posts obtenidos exitosamente',
             data: posts,
@@ -49,10 +46,11 @@ const getAllPosts = async (req: Request, res: Response) => {
     }
 };
 
+//OBTENCION DE UN POST POR ID
 const getPostById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const posts = await Post.findById(id).populate('author', 'name lastName');
+        const posts = await Post.findById(id).populate('author', 'name lastName email');
         if (!posts) {
             res.status(404).json({
                 message: 'Post no encontrado',
@@ -72,6 +70,7 @@ const getPostById = async (req: Request, res: Response) => {
     }
 };
 
+//ACTUALIZACION DE UN POST
 const updatePost = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -96,6 +95,7 @@ const updatePost = async (req: Request, res: Response) => {
     }
 };
 
+//ELIMINACION DE UN POST
 const deletePost = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -119,6 +119,7 @@ const deletePost = async (req: Request, res: Response) => {
     }
 };
 
+//LIKES DE UN POST
 const likePost = async (req: Request, res: Response) => {
     try {
         const { postId } = req.params;
@@ -156,6 +157,7 @@ const likePost = async (req: Request, res: Response) => {
     }
 };
 
+//UNLIKES DE UN POST
 const unLikePost = async (req: Request, res: Response) => {
     try{
         const { postId } = req.params;
@@ -193,6 +195,7 @@ const unLikePost = async (req: Request, res: Response) => {
     }
 };
 
+//EXPORTACION DE FUNCIONES
 export {
     createPost,
     getAllPosts,
