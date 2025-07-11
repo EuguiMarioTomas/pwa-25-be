@@ -146,7 +146,7 @@ const likePost = async (req: Request, res: Response) => {
             return;
         }
         res.status(200).json({
-            message: 'Post liked successfully',
+            message: 'Se le Dio Like al Post Exitosamente',
             data: post,
             error: false,
         });
@@ -184,7 +184,7 @@ const unLikePost = async (req: Request, res: Response) => {
             return;
         }
         res.status(200).json({
-            message: 'Post unLiked successfully',
+            message: 'Se Quito el Like al Post Exitosamente',
             data: post,
             error: false,
         });
